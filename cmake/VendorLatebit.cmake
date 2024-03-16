@@ -1,5 +1,4 @@
 function(fetch_latebit version system_name)
-
   message(STATUS "Fetching latebit ${version} for ${system_name}")
   include(FetchContent)
   FetchContent_Declare(

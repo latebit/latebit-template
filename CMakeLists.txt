@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28.1)
-project(fisholino)
+project(demo)
 
 include(cmake/VendorLatebit.cmake)
 
@@ -15,7 +15,13 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 option(WASM "Build for WebAssembly" OFF)
 
-fetch_latebit("V0.1.0-rc.1" ${CMAKE_SYSTEM_NAME})
+if (WASM)
+  set(SYSTEM_NAME "wasm")
+else()
+  set(SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
+endif()
+
+fetch_latebit("v0.1.0-rc.2" ${SYSTEM_NAME})
 
 if (WASM)
   set(OUTPUT "public/index.html")
