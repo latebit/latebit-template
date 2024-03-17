@@ -17,13 +17,14 @@ public:
     // This comes from the CMakeLists.txt file
     std::string version = LATEBIT_VERSION;
 
-    result += DM.drawString(this->getPosition(), "LateBit", TEXT_ALIGN_CENTER,
+    result += DM.drawString(this->getPosition(), "latebit", TEXT_ALIGN_CENTER,
                             BLACK, TEXT_SIZE_LARGE);
-    result += DM.drawString(this->getPosition() + Vector(1, 1), "LateBit",
+    result += DM.drawString(this->getPosition() + Vector(1, 1), "latebit",
                             TEXT_ALIGN_CENTER, WHITE, TEXT_SIZE_LARGE);
-
     result += DM.drawString(this->getPosition() + Vector(0, 20), version,
-                            TEXT_ALIGN_CENTER, lb::DARK_BLUE);
+                            TEXT_ALIGN_CENTER, lb::BLACK);
+    result += DM.drawString(this->getPosition() + Vector(1, 21), version,
+                            TEXT_ALIGN_CENTER, lb::WHITE);
     return result;
   }
 };
@@ -46,7 +47,7 @@ public:
 
     auto center =
         Vector(DM.getHorizontalCells() / 2.0, DM.getVerticalCells() / 2.0);
-    this->welcomeText->setPosition(center);
+    this->welcomeText->setPosition(center - Vector(0, 5));
 
     auto fishBox = this->fish->getBox();
     this->fish->setPosition(

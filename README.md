@@ -1,7 +1,7 @@
-LateBit Template
+latebit Template
 ---
 
-A template to get started with the [LateBit](https://github.com/latebit/latebit-engine) game engine.
+A template to get started with the [latebit](https://github.com/latebit/latebit-engine) game engine.
 
 ## How to use this template?
 
@@ -30,4 +30,4 @@ To run the commands above you would need the following dependencies
 
 * [latebit](https://github.com/latebit/latebit-engine) with all the setup required for your IDE
 * A `CMakeLists.txt` template to build your game natively and on WASM
-* Example assets (sprites, audio) and configuration to see how to work with `latebit`
+* Example assets (sprites, audio) and configuration to see how to work with latebit
