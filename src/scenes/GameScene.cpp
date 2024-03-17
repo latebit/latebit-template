@@ -7,7 +7,7 @@
 
 using namespace lb;
 
-class WelcomeText : public lb::Object {
+class WelcomeText : public Object {
 public:
   WelcomeText() { this->setType("WelcomeText"); }
 
@@ -17,18 +17,18 @@ public:
     // This comes from the CMakeLists.txt file
     std::string version = LATEBIT_VERSION;
 
-    result += DM.drawString(this->getPosition(), "Welcome to LateBit",
-                            lb::ALIGN_CENTER, lb::BLACK);
-    result += DM.drawString(this->getPosition() + Vector(1, 1),
-                            "Welcome to LateBit", lb::ALIGN_CENTER, lb::WHITE);
+    result += DM.drawString(this->getPosition(), "LateBit", TEXT_ALIGN_CENTER,
+                            BLACK, TEXT_SIZE_LARGE);
+    result += DM.drawString(this->getPosition() + Vector(1, 1), "LateBit",
+                            TEXT_ALIGN_CENTER, WHITE, TEXT_SIZE_LARGE);
 
     result += DM.drawString(this->getPosition() + Vector(0, 20), version,
-                            lb::ALIGN_CENTER, lb::WHITE);
+                            TEXT_ALIGN_CENTER, lb::DARK_BLUE);
     return result;
   }
 };
 
-class GameScene : public lb::Object {
+class GameScene : public Object {
 private:
   WelcomeText *welcomeText = new WelcomeText();
   Fish *fish = new Fish();

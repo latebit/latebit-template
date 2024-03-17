@@ -21,7 +21,7 @@ else()
   set(SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
 endif()
 
-fetch_latebit("v0.1.0-rc.2" ${SYSTEM_NAME})
+fetch_latebit("v0.1.0-rc.3" ${SYSTEM_NAME})
 
 if (WASM)
   set(OUTPUT "public/index.html")
