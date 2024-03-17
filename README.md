@@ -9,6 +9,9 @@ A template to get started with the [LateBit](https://github.com/latebit/latebit-
 # Clone the repository
 git clone https://github.com/latebit/latebit-template.git
 
+# Go in the directory
+cd latebit-template
+
 # Configure
 cmake -B build
 
@@ -25,6 +28,6 @@ To run the commands above you would need the following dependencies
 
 ## What's included?
 
-* [`latebit`](https://github.com/latebit/latebit-engine) with all the setup required for your IDE
+* [latebit](https://github.com/latebit/latebit-engine) with all the setup required for your IDE
 * A `CMakeLists.txt` template to build your game natively and on WASM
 * Example assets (sprites, audio) and configuration to see how to work with `latebit`
