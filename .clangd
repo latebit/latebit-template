@@ -2,5 +2,5 @@ CompileFlags:
   Add:
     - "-std=c++20"
     - "-Wall"
-    - "-Iinclude"
-    - "-Llib"
+    - "-Ibuild/include"
+    - "-Lbuild/lib"

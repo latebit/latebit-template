@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.28.1)
-project(demo)
+project(latebit_template) # Change this to your project name
 
-include(cmake/VendorLatebit.cmake)
+include(cmake/FetchEngine.cmake)
+include(cmake/FetchKiosk.cmake)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -21,7 +22,7 @@ else()
   set(SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
 endif()
 
-fetch_latebit("v0.1.0-rc.4" ${SYSTEM_NAME})
+fetch_latebit("v0.1.0-rc.5" ${SYSTEM_NAME})
 
 if (WASM)
   set(OUTPUT "public/index.html")
@@ -29,9 +30,10 @@ if (WASM)
   file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
   
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/public)
+  fetch_latebit_kiosk("v0.0.2" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
   set(EMSCRIPTEN_FLAGS
     "-sUSE_SDL=2"
-    "-sUSE_SDL_TTF=2"
     "-sUSE_SDL_MIXER=2"
     "-sSDL2_MIXER_FORMATS=[wav,mp3]"
   )
@@ -40,9 +42,9 @@ if (WASM)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
   endforeach()
 
-  add_executable(index.html main.cpp ${SRC_FILES})
-  set_target_properties(index.html PROPERTIES LINK_FLAGS "-sSTACK_SIZE=5MB --preload-file assets")
-  target_link_libraries(index.html PRIVATE latebit)
+  add_executable(index.js main.cpp ${SRC_FILES})
+  set_target_properties(index.js PROPERTIES LINK_FLAGS "-sSTACK_SIZE=1MB -sEXPORTED_FUNCTIONS=['_main'] -sEXPORTED_RUNTIME_METHODS=['callMain'] --preload-file assets")
+  target_link_libraries(index.js PRIVATE latebit)
 else()
   add_executable(${PROJECT_NAME} main.cpp ${SRC_FILES})
   target_link_libraries(${PROJECT_NAME} PRIVATE latebit)

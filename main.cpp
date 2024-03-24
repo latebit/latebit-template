@@ -14,6 +14,7 @@ int main() {
   // Load resources
   RM.loadSprite("assets/sprites/fish", "fish");
   RM.loadSprite("assets/sprites/bubbles", "bubbles");
+  RM.loadSprite("assets/sprites/logo", "logo");
   RM.loadMusic("assets/audio/music.mp3", "music");
 
   auto scene = new GameScene();

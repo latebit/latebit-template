@@ -1,5 +1,8 @@
+#include <cstdio>
+#include <latebit/EventOut.h>
 #include <latebit/EventStep.h>
 #include <latebit/Object.h>
+#include <latebit/WorldManager.h>
 
 using namespace lb;
 
@@ -12,6 +15,16 @@ public:
     setVelocity(Vector(0, -1));
     setPosition(position);
     setAltitude(2);
+    subscribe(OUT_EVENT);
+  }
+
+  int eventHandler(const Event *p_e) override {
+    if (p_e->getType() == OUT_EVENT) {
+      WM.markForDelete(this);
+      return 1;
+    }
+
+    return 0;
   }
 };
 

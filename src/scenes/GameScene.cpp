@@ -17,15 +17,17 @@ public:
     // This comes from the CMakeLists.txt file
     std::string version = LATEBIT_VERSION;
 
-    result += DM.drawString(this->getPosition(), "latebit", TEXT_ALIGN_CENTER,
-                            BLACK, TEXT_SIZE_LARGE);
-    result += DM.drawString(this->getPosition() + Vector(1, 1), "latebit",
-                            TEXT_ALIGN_CENTER, WHITE, TEXT_SIZE_LARGE);
-    result += DM.drawString(this->getPosition() + Vector(0, 20), version,
-                            TEXT_ALIGN_CENTER, lb::BLACK);
-    result += DM.drawString(this->getPosition() + Vector(1, 21), version,
-                            TEXT_ALIGN_CENTER, lb::WHITE);
+    result += DM.drawString(this->getPosition() + Vector(0, 30), version,
+                            TEXT_ALIGN_CENTER, WHITE);
     return result;
+  }
+};
+
+class Logo : public Object {
+public:
+  Logo() {
+    this->setType("Logo");
+    this->setSprite("logo");
   }
 };
 
@@ -33,6 +35,7 @@ class GameScene : public Object {
 private:
   WelcomeText *welcomeText = new WelcomeText();
   Fish *fish = new Fish();
+  Logo *logo = new Logo();
 
 public:
   GameScene() {
@@ -47,10 +50,15 @@ public:
 
     auto center =
         Vector(DM.getHorizontalCells() / 2.0, DM.getVerticalCells() / 2.0);
-    this->welcomeText->setPosition(center - Vector(0, 5));
 
     auto fishBox = this->fish->getBox();
+    auto logoBox = this->logo->getBox();
+
+    this->welcomeText->setPosition(center - Vector(0, 5));
+
     this->fish->setPosition(
         center - Vector(fishBox.getWidth() / 2, 32 - fishBox.getHeight() / 2));
+
+    this->logo->setPosition(center - Vector(logoBox.getWidth() / 2, 0));
   }
 };
