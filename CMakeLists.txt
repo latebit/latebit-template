@@ -22,12 +22,13 @@ else()
   set(SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
 endif()
 
-fetch_latebit("v0.1.0-rc.5" ${SYSTEM_NAME})
+fetch_latebit("v0.2.0-rc.1" ${SYSTEM_NAME})
 
 if (WASM)
   set(OUTPUT "public/index.html")
   
   file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY ${CMAKE_SOURCE_DIR}/latebit.cfg DESTINATION ${CMAKE_BINARY_DIR})
   
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/public)
   fetch_latebit_kiosk("v0.0.4" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -35,6 +36,7 @@ if (WASM)
   set(EMSCRIPTEN_FLAGS
     "-sUSE_SDL=2"
     "-sUSE_SDL_MIXER=2"
+    "-sUSE_LIBPNG=1"
     "-sSDL2_MIXER_FORMATS=[wav,mp3]"
   )
   
@@ -43,7 +45,7 @@ if (WASM)
   endforeach()
 
   add_executable(index.js main.cpp ${SRC_FILES})
-  set_target_properties(index.js PROPERTIES LINK_FLAGS "-sSTACK_SIZE=1MB -sEXPORTED_FUNCTIONS=['_main'] -sEXPORTED_RUNTIME_METHODS=['callMain'] --preload-file assets")
+  set_target_properties(index.js PROPERTIES LINK_FLAGS "-sSTACK_SIZE=1MB -sEXPORTED_FUNCTIONS=['_main'] -sEXPORTED_RUNTIME_METHODS=['callMain'] --preload-file assets --preload-file latebit.cfg")
   target_link_libraries(index.js PRIVATE latebit)
 else()
   add_executable(${PROJECT_NAME} main.cpp ${SRC_FILES})
