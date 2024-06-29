@@ -1,7 +1,7 @@
-#include <latebit/EventOut.h>
-#include <latebit/EventStep.h>
-#include <latebit/Object.h>
-#include <latebit/WorldManager.h>
+#include <latebit/core/events/EventOut.h>
+#include <latebit/core/events/EventStep.h>
+#include <latebit/core/objects/Object.h>
+#include <latebit/core/objects/WorldManager.h>
 
 using namespace lb;
 
@@ -17,8 +17,8 @@ public:
 
     // latebit supports collisions between objects. Marking this object as
     // SPECTRAL means that it will not collide with other objects. You can read
-    // more about solidness in latebit/Object.h
-    setSolidness(SPECTRAL);
+    // more about solidness in latebit/core/objects/Object.h
+    setSolidness(Solidness::SPECTRAL);
 
     // We set the velocity of the bubble to float up the screen
     setVelocity(Vector(0, -1));
@@ -59,6 +59,10 @@ public:
     // do much. We give it a type and assign it a sprite that we have loaded in
     // the main.cpp. You can pick the sprites by their label ("fish" in this
     // case)
+    //
+    // Head over to assets/sprites/fish.lbspr to see what a sprite looks like.
+    // If you have the Latebit Studio Visual Studio Code extension installed, you
+    // will also get a nice Sprite Editor to easily update it.
     setType("Fish");
     setSprite("fish");
 
@@ -76,6 +80,10 @@ public:
   int eventHandler(const Event *p_e) override {
     if (p_e->getType() == STEP_EVENT) {
       if (rand() % 100 == 0) {
+        // The Bubbles clean up themselves once they get out of the screen (see
+        // the implementation above). In other circumstances you may want the
+        // Fish to own them.
+        // Go check how Bubbles are implemented at the top of this file!
         new Bubbles(getPosition() + Vector(16, 0));
       }
       return 1;

@@ -1,9 +1,9 @@
 #include "src/scenes/GameScene.cpp"
 
-#include <latebit/Configuration.h>
-#include <latebit/GameManager.h>
-#include <latebit/Logger.h>
-#include <latebit/ResourceManager.h>
+#include <latebit/core/configuration/Configuration.h>
+#include <latebit/core/GameManager.h>
+#include <latebit/core/ResourceManager.h>
+#include <latebit/utils/Logger.h>
 
 using namespace lb;
 
@@ -39,14 +39,14 @@ int main() {
   // No matter what type of sprite you use, you can use them in the same way and
   // they abide by the same rules: they can only display the 16 colors of the
   // latebit palette.
-  RM.loadTextSprite("assets/sprites/fish", "fish");
-  RM.loadTextSprite("assets/sprites/bubbles", "bubbles");
+  RM.loadTextSprite("assets/sprites/fish.lbspr", "fish");
+  RM.loadTextSprite("assets/sprites/bubbles.lbspr", "bubbles");
   RM.loadImageSprite("assets/sprites/logo.png", "logo");
 
   // latebit supports two types audio: music and sound effects.
   // Loading them is as simple as loading sprites, except that to hear them you
   // need to play() them.
-  RM.loadMusic("assets/audio/music.mp3", "music");
+  RM.loadMusic("assets/audio/music.lbmus", "music");
 
   // Go check the src/scenes/GameScene.cpp file to see how to create a scene and
   // make your first game!

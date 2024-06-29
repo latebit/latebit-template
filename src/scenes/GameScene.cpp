@@ -1,9 +1,9 @@
-#include <latebit/Colors.h>
-#include <latebit/DisplayManager.h>
-#include <latebit/Object.h>
+#include <latebit/core/graphics/Colors.h>
+#include <latebit/core/graphics/DisplayManager.h>
+#include <latebit/core/objects/Object.h>
+#include <latebit/core/ResourceManager.h>
 
 #include "../characters/Fish.cpp"
-#include "latebit/ResourceManager.h"
 
 using namespace lb;
 
@@ -21,7 +21,7 @@ public:
     // Here we are using the Display Manager (DM) to draw text on the screen at
     // a given position.
     result += DM.drawString(this->getPosition() + Vector(0, 30), version,
-                            TEXT_ALIGN_CENTER, WHITE);
+                            TextAlignment::CENTER, Color::WHITE);
     return result;
   }
 };
@@ -38,6 +38,12 @@ public:
 
 class GameScene : public Object {
 private:
+  // Here we are defining child objects of our GameScene. In other words, this
+  // defines the objects that will appear in this scene.
+  // The GameScene owns the objects and is therefore responsibile for cleaning
+  // them up. You can check the ~GameScene destructor to see how.
+  //
+  // Head to the GameScene constructor to see how to set up a scene!
   WelcomeText *welcomeText = new WelcomeText();
   Fish *fish = new Fish();
   Logo *logo = new Logo();
@@ -56,23 +62,41 @@ public:
 
     // Here we are retrieving the music we loaded in the main.cpp from the
     // ResourceManager (RM) and playing it.
-    auto music = RM.getMusic("music");
+    const auto music = RM.getMusic("music");
     if (music != nullptr) {
-      music->play();
+      music->play(true);
     }
 
     // In the following block we are placing objects in the scene.
-    auto center =
+    const auto center =
         Vector(DM.getHorizontalCells() / 2.0, DM.getVerticalCells() / 2.0);
 
-    auto fishBox = this->fish->getBox();
-    auto logoBox = this->logo->getBox();
+    // To place objects in the screen we need to know how "big" they are.
+    // A box is a simplified, rectangular representation of an object's boundaries. 
+    // It defines the minimum and maximum extents of the object along each axis,
+    // providing an efficient way to perform collision detection and spatial queries.
+    const auto fishBox = this->fish->getBox();
+    const auto logoBox = this->logo->getBox();
 
+    // Positions are defined by bidimensional vectors. You can perform standard
+    // vector operations on them. Take a look at the header for the Vector class
+    // for more information.
     this->welcomeText->setPosition(center - Vector(0, 5));
 
     this->fish->setPosition(
         center - Vector(fishBox.getWidth() / 2, 32 - fishBox.getHeight() / 2));
 
     this->logo->setPosition(center - Vector(logoBox.getWidth() / 2, 0));
+
+    // Now you are ready to see how the objects we have manipulated are defined.
+    // Go check the WelcomeText, Logo, and Fish to start implementing your first objects.
   }
+
+  ~GameScene() {
+    // GameScene owns our mascotte, the text, and the logo, therefore it's responsible
+    // for cleaning them up once it gets detroyed.
+    WM.removeObject(this->logo);
+    WM.removeObject(this->fish);
+    WM.removeObject(this->welcomeText);
+  };
 };
