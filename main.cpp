@@ -47,6 +47,7 @@ int main() {
   // Loading them is as simple as loading sprites, except that to hear them you
   // need to play() them.
   RM.loadMusic("assets/audio/music.lbmus", "music");
+  RM.loadSound("assets/audio/sound.lbsfx", "sound");
 
   // Go check the src/scenes/GameScene.cpp file to see how to create a scene and
   // make your first game!

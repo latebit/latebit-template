@@ -1,7 +1,9 @@
 #include <latebit/core/events/EventOut.h>
 #include <latebit/core/events/EventStep.h>
+#include <latebit/core/events/EventInput.h>
 #include <latebit/core/objects/Object.h>
 #include <latebit/core/objects/WorldManager.h>
+#include <latebit/core/ResourceManager.h>
 
 using namespace lb;
 
@@ -41,8 +43,8 @@ public:
   // This is where we handle the events we subscribed to.
   // In this case, we are only interested in the OUT_EVENT, which we use to mark
   // the bubble for deletion when it goes out of the screen.
-  int eventHandler(const Event *p_e) override {
-    if (p_e->getType() == OUT_EVENT) {
+  int eventHandler(const Event *event) override {
+    if (event->getType() == OUT_EVENT) {
       WM.markForDelete(this);
       return 1;
     }
@@ -52,6 +54,8 @@ public:
 };
 
 class Fish : public Object {
+private:
+  const Sound* sfx = RM.getSound("sound");
 public:
   Fish() {
     // This is your first character!
@@ -72,13 +76,17 @@ public:
     // frame. We are using it to spawn bubbles every now and then (see
     // eventHandler())
     subscribe(STEP_EVENT);
+    
+    // Here instead we are subscribing to an input event, this is how the
+    // players can interact with our game
+    subscribe(INPUT_EVENT);
   }
 
   // This is where we handle the events we subscribed to.
   // In this case, we are only interested in the STEP_EVENT, which we use to
   // spawn bubbles from time to time.
-  int eventHandler(const Event *p_e) override {
-    if (p_e->getType() == STEP_EVENT) {
+  int eventHandler(const Event *event) override {
+    if (event->getType() == STEP_EVENT) {
       if (rand() % 100 == 0) {
         // The Bubbles clean up themselves once they get out of the screen (see
         // the implementation above). In other circumstances you may want the
@@ -86,7 +94,22 @@ public:
         // Go check how Bubbles are implemented at the top of this file!
         new Bubbles(getPosition() + Vector(16, 0));
       }
+      // Returning 1 means the event was handled and it won't cascade
       return 1;
+    }
+
+    if (event->getType() == INPUT_EVENT) {
+      // While handling the input events, is important to understand what what button
+      // was pressed. Fortunately, the event holds this information, but only after it's
+      const EventInput* inputEvent = static_cast<const EventInput*>(event);
+
+      if (inputEvent->getKey() == InputKey::A && inputEvent->getAction() == InputAction::PRESSED) {
+        // As promised in the GameScene, we are now playing the sound when A is pressed
+        this->sfx->play();
+
+        // And we are returning 1 again to signal that the event was handled
+        return 1;
+      }
     }
 
     return 0;

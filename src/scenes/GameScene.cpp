@@ -3,6 +3,7 @@
 #include <latebit/core/objects/Object.h>
 #include <latebit/core/ResourceManager.h>
 
+#include <sstream>
 #include "../characters/Fish.cpp"
 
 using namespace lb;
@@ -22,6 +23,13 @@ public:
     // a given position.
     result += DM.drawString(this->getPosition() + Vector(0, 30), version,
                             TextAlignment::CENTER, Color::WHITE);
+    
+    // You can use special glyphs to represent input buttons. This is useful
+    // for on-screen instructions and settings.
+    char msg[26];
+    sprintf(msg, "Press %c to play a sound", InputGlyph::A);
+    result += DM.drawString(this->getPosition() + Vector(0, 50), msg, TextAlignment::CENTER, Color::PEACH);
+
     return result;
   }
 };
