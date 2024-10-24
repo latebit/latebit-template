@@ -1,9 +1,9 @@
 #include <latebit/core/graphics/Colors.h>
 #include <latebit/core/graphics/DisplayManager.h>
-#include <latebit/core/objects/Object.h>
+#include <latebit/core/world/WorldManager.h>
+#include <latebit/core/world/Object.h>
 #include <latebit/core/ResourceManager.h>
 
-#include <sstream>
 #include "../characters/Fish.cpp"
 
 using namespace lb;
@@ -27,7 +27,7 @@ public:
     // You can use special glyphs to represent input buttons. This is useful
     // for on-screen instructions and settings.
     char msg[26];
-    sprintf(msg, "Press %c to play a sound", InputGlyph::A);
+    snprintf(msg, sizeof(msg), "Press %c to play a sound", InputGlyph::A);
     result += DM.drawString(this->getPosition() + Vector(0, 50), msg, TextAlignment::CENTER, Color::PEACH);
 
     return result;
@@ -44,26 +44,19 @@ public:
   }
 };
 
-class GameScene : public Object {
-private:
-  // Here we are defining child objects of our GameScene. In other words, this
-  // defines the objects that will appear in this scene.
-  // The GameScene owns the objects and is therefore responsibile for cleaning
-  // them up. You can check the ~GameScene destructor to see how.
-  //
-  // Head to the GameScene constructor to see how to set up a scene!
-  WelcomeText *welcomeText = new WelcomeText();
-  Fish *fish = new Fish();
-  Logo *logo = new Logo();
-
+class GameScene : public Scene {
 public:
   GameScene() {
-    // The scene is a container object for all the objects that will be drawn on
-    // the screen.
-    // Setting the type will allow you to retrieve the scene later on and to
-    // identify it in the logs.
-    setType("GameScene");
+    // Here we are defining the objects that will appean in our GameScene.
+    // The GameScene owns the objects and it ensures that they are cleaned up.
+    auto logo = this->createObject<Logo>();
+    auto welcomeText = this->createObject<WelcomeText>();
 
+    // Some objects are more complex and need parameters to be created. In this
+    // case, we are passing the GameScene to the Fish object so it can create
+    // Bubbles.
+    auto fish = this->createObject<Fish>(this);
+    
     // The Display Manager (DM) is responsible for drawing everything on the
     // screen. Here you can set the background color of the scene for example.
     DM.setBackground(Color::BLUE);
@@ -76,35 +69,36 @@ public:
     }
 
     // In the following block we are placing objects in the scene.
-    const auto center =
-        Vector(DM.getHorizontalCells() / 2.0, DM.getVerticalCells() / 2.0);
+    const auto center = Vector(WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0);
 
     // To place objects in the screen we need to know how "big" they are.
     // A box is a simplified, rectangular representation of an object's boundaries. 
     // It defines the minimum and maximum extents of the object along each axis,
     // providing an efficient way to perform collision detection and spatial queries.
-    const auto fishBox = this->fish->getBox();
-    const auto logoBox = this->logo->getBox();
+    const auto fishBox = fish->getBox();
+    const auto logoBox = logo->getBox();
 
     // Positions are defined by bidimensional vectors. You can perform standard
     // vector operations on them. Take a look at the header for the Vector class
     // for more information.
-    this->welcomeText->setPosition(center - Vector(0, 5));
+    welcomeText->setPosition(center - Vector(0, 5));
 
-    this->fish->setPosition(
+    fish->setPosition(
         center - Vector(fishBox.getWidth() / 2, 32 - fishBox.getHeight() / 2));
 
-    this->logo->setPosition(center - Vector(logoBox.getWidth() / 2, 0));
+    logo->setPosition(center - Vector(logoBox.getWidth() / 2, 0));
 
     // Now you are ready to see how the objects we have manipulated are defined.
     // Go check the WelcomeText, Logo, and Fish to start implementing your first objects.
   }
 
-  ~GameScene() {
-    // GameScene owns our mascotte, the text, and the logo, therefore it's responsible
-    // for cleaning them up once it gets detroyed.
-    WM.removeObject(this->logo);
-    WM.removeObject(this->fish);
-    WM.removeObject(this->welcomeText);
-  };
+  void onActivated() override {
+    // This method is called when the scene is activated. You can use it to
+    // initialize the scene or to perform actions when the scene is shown.
+  }
+
+  void onDeactivated() override {
+    // This method is called when the scene is deactivated. You can use it to
+    // clean up resources or to perform actions when the scene is hidden.
+  }
 };

@@ -1,7 +1,7 @@
 function(fetch_latebit_kiosk version public_dir)
   message(STATUS "Fetching latebit-kiosk ${version}")
   include(FetchContent)
-  FetchContent_Declare(
+  FetchContent_MakeAvailable(
     latebit_kiosk
     URL https://github.com/latebit/latebit-kiosk/archive/refs/tags/${version}.tar.gz
   )

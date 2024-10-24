@@ -1,8 +1,9 @@
 #include <latebit/core/events/EventOut.h>
 #include <latebit/core/events/EventStep.h>
 #include <latebit/core/events/EventInput.h>
-#include <latebit/core/objects/Object.h>
-#include <latebit/core/objects/WorldManager.h>
+#include <latebit/core/world/Object.h>
+#include <latebit/core/world/Scene.h>
+#include <latebit/core/world/WorldManager.h>
 #include <latebit/core/ResourceManager.h>
 
 using namespace lb;
@@ -56,8 +57,10 @@ public:
 class Fish : public Object {
 private:
   const Sound* sfx = RM.getSound("sound");
+  Scene* scene = nullptr;
+
 public:
-  Fish() {
+  Fish(Scene* scene) : scene(scene) {
     // This is your first character!
     // It is a fish that swims in the middle of the screen and honestly does not
     // do much. We give it a type and assign it a sprite that we have loaded in
@@ -89,10 +92,9 @@ public:
     if (event->getType() == STEP_EVENT) {
       if (rand() % 100 == 0) {
         // The Bubbles clean up themselves once they get out of the screen (see
-        // the implementation above). In other circumstances you may want the
-        // Fish to own them.
+        // the implementation above).
         // Go check how Bubbles are implemented at the top of this file!
-        new Bubbles(getPosition() + Vector(16, 0));
+        this->scene->createObject<Bubbles>(getPosition() + Vector(16, 0));
       }
       // Returning 1 means the event was handled and it won't cascade
       return 1;

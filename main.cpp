@@ -49,14 +49,16 @@ int main() {
   RM.loadMusic("assets/audio/music.lbmus", "music");
   RM.loadSound("assets/audio/sound.lbsfx", "sound");
 
-  // Go check the src/scenes/GameScene.cpp file to see how to create a scene and
+  // The WorldManager (WM) is responsible for managing the scenes in the game.
+  auto scene = WM.createScene<GameScene>("game");
+  // When you create a scene, you need to activate it to see it on the screen.
+  // Go check the src/scenes/GameScene.cpp file to see how setup a scene and
   // make your first game!
-  auto scene = new GameScene();
+  scene->activate();
 
   // The GM will run the game loop until GM.setGameOver(true) is called. Every
   // iteration of the loop loosely represents a frame in the game.
   GM.run();
-  delete scene;
 
   return 0;
 }
